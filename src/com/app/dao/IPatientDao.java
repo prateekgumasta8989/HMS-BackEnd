@@ -12,5 +12,4 @@ public interface IPatientDao {
 	List<InvoiceDto> getAllInvoicesForPatient(int patientId);
 	List<AppointmentDTO> getAppointmentListByPatientId(int patientId);
 	PatientDetailsDto getAllDetailsOfPatient(int id);
-
 }
