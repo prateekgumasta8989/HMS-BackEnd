@@ -8,12 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.dao.IPatientDao;
 import com.app.dto.AppointmentDTO;
+import com.app.dto.DoctorDTO;
 import com.app.dto.InvoiceDto;
+import com.app.dto.PatientDto;
 import com.app.patientdto.PatientDetailsDto;
 
 @RestController
@@ -93,9 +97,36 @@ public class PatientController {
 		}catch (RuntimeException e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>("not even a single department" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		
+		}	
 	}
+	
+	@GetMapping("/doctor/{id}")
+	public ResponseEntity<?> getPatientDoctor(@PathVariable(name="id") int id) {
+		System.out.println("getPatientDoctor() in /admin/patient");
+		
+		try {
+			DoctorDTO doctorDTO = patientDao.getDoctorPatient(id);
+			System.out.println("---------------------------------------------------------------");
+			System.out.println(doctorDTO);
+			return new ResponseEntity<DoctorDTO>(doctorDTO, HttpStatus.OK);
+		}catch (RuntimeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("not even a single department" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+	}
+	
+	
+	@PostMapping("/app/old")
+	public ResponseEntity<?> addAppointmentOld(@RequestBody AppointmentDTO appDto) {
+		System.out.println("in controller appointment app old" + appDto);
+		System.out.println("addAppointmentOld() in /patient/app------------");
+		try {
+			return new ResponseEntity<PatientDto>(patientDao.registerAppointmentOld(appDto), HttpStatus.OK);
+		}catch (RuntimeException e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<String>("not added" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	
 }

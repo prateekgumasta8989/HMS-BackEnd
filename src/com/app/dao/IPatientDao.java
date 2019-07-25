@@ -3,8 +3,11 @@ package com.app.dao;
 import java.util.List;
 
 import com.app.dto.AppointmentDTO;
+import com.app.dto.DoctorDTO;
 import com.app.dto.InvoiceDto;
+import com.app.dto.PatientDto;
 import com.app.patientdto.PatientDetailsDto;
+import com.app.pojos.Doctors;
 
 public interface IPatientDao {
 	String payInvoicesFromPatient(int invId);
@@ -12,4 +15,7 @@ public interface IPatientDao {
 	List<InvoiceDto> getAllInvoicesForPatient(int patientId);
 	List<AppointmentDTO> getAppointmentListByPatientId(int patientId);
 	PatientDetailsDto getAllDetailsOfPatient(int id);
+	DoctorDTO getDoctorPatient(int id);
+	PatientDto registerAppointmentOld(AppointmentDTO appDto);
+
 }

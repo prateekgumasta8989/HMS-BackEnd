@@ -3,6 +3,8 @@ package com.app.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dto.AppointmentDTO;
+import com.app.dto.DoctorDTO;
 import com.app.dto.InvoiceDto;
+import com.app.dto.PatientDto;
 import com.app.patientdto.AppointmentPrescriptionDto;
 import com.app.patientdto.PatientAppointmentDto;
 import com.app.patientdto.PatientDetailsDto;
 import com.app.pojos.AppointmentTable;
+import com.app.pojos.Doctors;
 import com.app.pojos.Invoices;
 import com.app.pojos.Patient;
 import com.app.pojos.Prescription;
@@ -118,5 +123,41 @@ public class PatientDaoImple implements IPatientDao{
 		System.out.println("IN  DAOOOO ================================================");
 		System.out.println(patientDetailsDto);
 		return patientDetailsDto;
+	}
+
+
+
+	@Override
+	public DoctorDTO getDoctorPatient(int id) {
+		Session session = sf.getCurrentSession();
+		Patient patient = session.get(Patient.class, id);
+		if(patient != null) {
+			patient.getAppointment().size();
+			if(patient.getAppointment().size() != 0) {
+				int docId = patient.getAppointment().get(0).getDoctor().getId();
+				Doctors doctors = session.get(Doctors.class, docId);
+				DoctorDTO doctorDTO = new DoctorDTO(doctors.getId(), doctors.getDocName(), doctors.getDocContactInfo(), doctors.getDept().getDeptName());
+				return doctorDTO;
+			}
+		}
+		return null;
+	}
+	
+	
+	@Override
+	public PatientDto registerAppointmentOld(AppointmentDTO appDto) {
+		Session session = sf.getCurrentSession();
+		Patient patient = session.get(Patient.class, appDto.getId());
+		
+		System.out.println("in admin dao app date  =>>>" + appDto.getAppointmentDate());
+		AppointmentTable appTable = new AppointmentTable(appDto.getProblem(), appDto.getAppointmentDate(), 0);
+		
+		session.save(appTable);
+		
+		Doctors doc = session.get(Doctors.class, appDto.getDocId());
+		doc.addAppointmentToDoctor(appTable);
+		appTable.setPatient(patient);System.out.println("successfully added");
+		System.out.println("email =>" + patient.getEmail() + "password =>" + patient.getPassword());
+		return new PatientDto(patient.getId(), patient.getPatientName(), patient.getPatientGender(), patient.getPatientBloodGroup(), patient.getPatientContactInfo(), patient.getPatientCaseStatus(), patient.getEmail(), patient.getPassword());
 	}
 }
