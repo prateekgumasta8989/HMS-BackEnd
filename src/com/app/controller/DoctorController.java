@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.dao.IDoctorDao;
 import com.app.dto.AppointmentDTO;
 import com.app.dto.InvoiceDto;
 import com.app.dto.MedicineDto;
@@ -22,6 +21,7 @@ import com.app.dto.PatientDto;
 import com.app.dto.PrescriptionDto;
 import com.app.patientdto.PatientDetailsDto;
 import com.app.pojos.Medicines;
+import com.app.service.IDoctorService;
 
 @RestController
 @RequestMapping("/doctor")
@@ -29,7 +29,7 @@ import com.app.pojos.Medicines;
 public class DoctorController {
 
 	@Autowired
-	IDoctorDao doctorDao;
+	IDoctorService doctorService;
 	public DoctorController() {
 		System.out.println("inside the constructor of doctor Controller");
 	}
@@ -42,7 +42,7 @@ public class DoctorController {
 		System.out.println("in controller appointment app getAppointmentListOfParticlarDoctor " );
 		System.out.println(" getAppointmentListOfParticlarDoctor() in /admin/app------------");
 		try {
-			List<AppointmentDTO> l1 = doctorDao.getAppointmentListByDocId(id);
+			List<AppointmentDTO> l1 = doctorService.getAppointmentListByDocId(id);
 			return new ResponseEntity<List<AppointmentDTO>>(l1, HttpStatus.OK);
 		}catch (RuntimeException e) {
 			System.out.println(e.getMessage());
@@ -59,7 +59,7 @@ public class DoctorController {
 		System.out.println("in controller appointment app setAppointmentByAppointmentId" );
 		System.out.println(" setAppointmentByAppointmentId() in /admin/app/set------------");
 		try {
-			return new ResponseEntity<String>(doctorDao.acceptAppointmentOfPatient(id), HttpStatus.OK);
+			return new ResponseEntity<String>(doctorService.acceptAppointmentOfPatient(id), HttpStatus.OK);
 		}catch (RuntimeException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class DoctorController {
 		System.out.println("getAllPatient() in /admin/patient");
 		
 		try {
-			List<PatientDto> l2 =  doctorDao.getPatientByDoctorId(id);
+			List<PatientDto> l2 =  doctorService.getPatientByDoctorId(id);
 			return new ResponseEntity<List<PatientDto>>(l2, HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("not even a single department" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,7 +92,7 @@ public class DoctorController {
 		System.out.println("getAllPatient() in /admin/patient");
 		
 		try {
-			PatientDetailsDto p = doctorDao.getAllDetailsOfPatient(id);
+			PatientDetailsDto p = doctorService.getAllDetailsOfPatient(id);
 			System.out.println("---------------------------------------------------------------");
 			System.out.println(p);
 			return new ResponseEntity<PatientDetailsDto>(p, HttpStatus.OK);
@@ -109,7 +109,7 @@ public class DoctorController {
 
 		System.out.println("getAllInvoicesForPatient() in /admin/invoices/patient/id="+id+"------------");
 		try {
-			List<InvoiceDto> l1 = doctorDao.getAllInvoicesForPatient(id);
+			List<InvoiceDto> l1 = doctorService.getAllInvoicesForPatient(id);
 			for (InvoiceDto invoiceDto : l1) {
 				System.out.println(invoiceDto);
 			}
@@ -126,7 +126,7 @@ public class DoctorController {
 
 		System.out.println("in controller admin med ------>  getAllMedicines");
 		try {
-			List<Medicines> l1 = doctorDao.getAllMedicines();
+			List<Medicines> l1 = doctorService.getAllMedicines();
 			List<MedicineDto> l2 = new ArrayList<MedicineDto>();
 			if(l1.size()!=0) {
 				for (Medicines med : l1) {
@@ -150,8 +150,8 @@ public class DoctorController {
 		
 		
 		try {
-			String res = doctorDao.registerPrescriptionWithAppointmentId(listPres,id);
-			doctorDao.registerInvoicesWithPrescription(listPres, id);
+			String res = doctorService.registerPrescriptionWithAppointmentId(listPres,id);
+			doctorService.registerInvoicesWithPrescription(listPres, id);
 			return new ResponseEntity<String>(res, HttpStatus.OK);
 		}catch (RuntimeException e) {
 			e.printStackTrace();

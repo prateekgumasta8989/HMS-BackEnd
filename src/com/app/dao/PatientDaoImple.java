@@ -54,7 +54,7 @@ public class PatientDaoImple implements IPatientDao{
 		Session session = sf.getCurrentSession();
 		Invoices invoices = session.get(Invoices.class, invId);
 		invoices.setStatus("paid");
-		return null;
+		return "added";
 	}
 
 

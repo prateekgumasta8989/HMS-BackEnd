@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.app.dao.IPatientDao;
 import com.app.dto.AppointmentDTO;
 import com.app.dto.DoctorDTO;
 import com.app.dto.InvoiceDto;
 import com.app.dto.PatientDto;
 import com.app.patientdto.PatientDetailsDto;
+import com.app.service.IPatientService;
 
 @RestController
 @RequestMapping("/patient")
@@ -27,7 +26,7 @@ public class PatientController {
 	
 	
 	@Autowired
-	IPatientDao patientDao;
+	IPatientService patientService;
 	
 	public PatientController() {
 		System.out.println("inside the constructor of patient Controller");
@@ -38,7 +37,7 @@ public class PatientController {
 		System.out.println("in controller appointment app getAppointmentListOfParticlarPatient " );
 		System.out.println(" getAppointmentListOfParticlarPatient() in /admin/app------------");
 		try {
-			List<AppointmentDTO> l1 = patientDao.getAppointmentListByPatientId(id);
+			List<AppointmentDTO> l1 = patientService.getAppointmentListByPatientId(id);
 			return new ResponseEntity<List<AppointmentDTO>>(l1, HttpStatus.OK);
 		}catch (RuntimeException e) {
 			System.out.println(e.getMessage());
@@ -53,7 +52,7 @@ public class PatientController {
 	public ResponseEntity<String> payInvoicesFromPatient(@PathVariable(name="id") int id){
 		System.out.println("inside admin/invoices/"+ id +" controller payInvoicesFromPatient--------->>");
 		try {
-			return new ResponseEntity<String>(patientDao.payInvoicesFromPatient(id), HttpStatus.OK);
+			return new ResponseEntity<String>(patientService.payInvoicesFromPatient(id), HttpStatus.OK);
 		}catch(RuntimeException re) {
 			return new ResponseEntity<String>("not success", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -63,7 +62,7 @@ public class PatientController {
 	public ResponseEntity<String> payInvoicesFromPatientForAll(@PathVariable(name="id") int id){
 		System.out.println("inside admin/invoices/"+ id +" controller payInvoicesFromPatient--------->>");
 		try {
-			return new ResponseEntity<String>(patientDao.payInvoicesFromPatientForAll(id), HttpStatus.OK);
+			return new ResponseEntity<String>(patientService.payInvoicesFromPatientForAll(id), HttpStatus.OK);
 		}catch(RuntimeException re) {
 			return new ResponseEntity<String>("not success", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -74,7 +73,7 @@ public class PatientController {
 	public ResponseEntity<?> getAllInvoicesForPatient(@PathVariable(name="id") int id){
 		System.out.println("getAllInvoicesForPatient() in /admin/invoices/patient/id="+id+"------------");
 		try {
-			List<InvoiceDto> l1 = patientDao.getAllInvoicesForPatient(id);
+			List<InvoiceDto> l1 = patientService.getAllInvoicesForPatient(id);
 			for (InvoiceDto invoiceDto : l1) {
 				System.out.println(invoiceDto);
 			}
@@ -90,7 +89,7 @@ public class PatientController {
 		System.out.println("getAllPatient() in /admin/patient");
 		
 		try {
-			PatientDetailsDto p = patientDao.getAllDetailsOfPatient(id);
+			PatientDetailsDto p = patientService.getAllDetailsOfPatient(id);
 			System.out.println("---------------------------------------------------------------");
 			System.out.println(p);
 			return new ResponseEntity<PatientDetailsDto>(p, HttpStatus.OK);
@@ -105,7 +104,7 @@ public class PatientController {
 		System.out.println("getPatientDoctor() in /admin/patient");
 		
 		try {
-			DoctorDTO doctorDTO = patientDao.getDoctorPatient(id);
+			DoctorDTO doctorDTO = patientService.getDoctorPatient(id);
 			System.out.println("---------------------------------------------------------------");
 			System.out.println(doctorDTO);
 			return new ResponseEntity<DoctorDTO>(doctorDTO, HttpStatus.OK);
@@ -121,7 +120,7 @@ public class PatientController {
 		System.out.println("in controller appointment app old" + appDto);
 		System.out.println("addAppointmentOld() in /patient/app------------");
 		try {
-			return new ResponseEntity<PatientDto>(patientDao.registerAppointmentOld(appDto), HttpStatus.OK);
+			return new ResponseEntity<PatientDto>(patientService.registerAppointmentOld(appDto), HttpStatus.OK);
 		}catch (RuntimeException e) {
 			System.out.println(e.getMessage());
 			return new ResponseEntity<String>("not added" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

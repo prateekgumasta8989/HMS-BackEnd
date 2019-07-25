@@ -68,24 +68,7 @@ public class UserDaoImple implements IUserDao{
 		return new PatientDto(patient.getId(), patient.getPatientName(), patient.getPatientGender(), patient.getPatientBloodGroup(), patient.getPatientContactInfo(), patient.getPatientCaseStatus(), patient.getEmail(), patient.getPassword()); 
 	}
 	
-	@Override
-	public PatientDto registerAppointmentOld(AppointmentDTO appDto) {
-		Session session = sf.getCurrentSession();
-		Patient patient = session.get(Patient.class, appDto.getId());
-		
-		System.out.println("in admin dao app date  =>>>" + appDto.getAppointmentDate());
-		AppointmentTable appTable = new AppointmentTable(appDto.getProblem(), appDto.getAppointmentDate(), 0);
-		
-		session.save(appTable);
-		
-		Doctors doc = session.get(Doctors.class, appDto.getDocId());
-		doc.addAppointmentToDoctor(appTable);
-		appTable.setPatient(patient);System.out.println("successfully added");
-		System.out.println("email =>" + patient.getEmail() + "password =>" + patient.getPassword());
-		return new PatientDto(patient.getId(), patient.getPatientName(), patient.getPatientGender(), patient.getPatientBloodGroup(), patient.getPatientContactInfo(), patient.getPatientCaseStatus(), patient.getEmail(), patient.getPassword());
-	}
-
-
+	
 	
 	@Override
 	public List<PatientDto> getAllPatient() {
