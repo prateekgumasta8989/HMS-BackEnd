@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,9 @@ public class UserController {
 
 	@Autowired
 	IUserService userService;
+	
+	@Autowired
+	JavaMailSender sender;
 	
 	public UserController() {
 		System.out.println("inside the constructor of user Controller");
@@ -77,7 +82,13 @@ public class UserController {
 		System.out.println("addAppointmentNew() in /admin/app------------"  + appDto);
 
 		try {
-			return new ResponseEntity<PatientDto>(userService.registerAppointmentNew(appDto), HttpStatus.OK);
+			PatientDto dto = userService.registerAppointmentNew(appDto);
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(dto.getPatientContactInfo());
+			mailMessage.setSubject("Appointment registered successfully");
+			mailMessage.setText("your user id ----- " + dto.getEmail() + "    password ---- " + dto.getPassword());
+			sender.send(mailMessage);
+			return new ResponseEntity<PatientDto>(dto , HttpStatus.OK);
 		}catch(RuntimeException re) {
 			return new ResponseEntity<String>("not added successfully", HttpStatus.INTERNAL_SERVER_ERROR);
 		}

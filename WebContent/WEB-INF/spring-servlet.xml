@@ -16,5 +16,5 @@
 	/> -->
 	<!-- import hibernate config xml file -->
 	<import resource="classpath:/hibernate-persistence.xml"/>
-	
+		<import resource="classpath:/email-settings.xml"/>
 </beans>
