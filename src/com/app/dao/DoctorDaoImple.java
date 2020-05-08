@@ -24,7 +24,6 @@ import com.app.pojos.Patient;
 import com.app.pojos.Prescription;
 
 @Repository
-@Transactional
 public class DoctorDaoImple implements IDoctorDao
 {
 	@Autowired

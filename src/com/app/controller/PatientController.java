@@ -98,6 +98,20 @@ public class PatientController {
 			return new ResponseEntity<String>("not even a single department" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
+	@GetMapping("/pd/{id}")
+	public ResponseEntity<?> getPatient(@PathVariable(name="id") int id) {
+		System.out.println("getAllPatient() in /admin/patient");
+		
+		try {
+			PatientDetailsDto p = patientService.getAllDetailsOfPatient(id);
+			System.out.println("---------------------------------------------------------------");
+			System.out.println(p);
+			return new ResponseEntity<PatientDetailsDto>(p, HttpStatus.OK);
+		}catch (RuntimeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("not even a single department" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+	}
 	
 	@GetMapping("/doctor/{id}")
 	public ResponseEntity<?> getPatientDoctor(@PathVariable(name="id") int id) {

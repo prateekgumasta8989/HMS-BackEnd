@@ -78,4 +78,11 @@ public class PatientServiceImple implements IPatientService{
 	public PatientDto registerAppointmentOld(AppointmentDTO appDto) {
 		return dao.registerAppointmentOld(appDto);
 	}
+
+
+
+	@Override
+	public PatientDto getPd(int pid) {
+		return dao.getPd(pid);
+	}
 }

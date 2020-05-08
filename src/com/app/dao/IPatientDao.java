@@ -17,5 +17,6 @@ public interface IPatientDao {
 	PatientDetailsDto getAllDetailsOfPatient(int id);
 	DoctorDTO getDoctorPatient(int id);
 	PatientDto registerAppointmentOld(AppointmentDTO appDto);
+	PatientDto getPd(int pid);
 
 }

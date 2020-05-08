@@ -19,7 +19,6 @@ import com.app.pojos.Doctors;
 import com.app.pojos.Patient;
 
 @Repository
-@Transactional
 public class UserDaoImple implements IUserDao{
 
 	

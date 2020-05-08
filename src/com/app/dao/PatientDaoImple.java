@@ -25,7 +25,6 @@ import com.app.pojos.Patient;
 import com.app.pojos.Prescription;
 
 @Repository
-@Transactional
 public class PatientDaoImple implements IPatientDao{
 	@Autowired
 	private SessionFactory sf;
@@ -159,5 +158,13 @@ public class PatientDaoImple implements IPatientDao{
 		appTable.setPatient(patient);System.out.println("successfully added");
 		System.out.println("email =>" + patient.getEmail() + "password =>" + patient.getPassword());
 		return new PatientDto(patient.getId(), patient.getPatientName(), patient.getPatientGender(), patient.getPatientBloodGroup(), patient.getPatientContactInfo(), patient.getPatientCaseStatus(), patient.getEmail(), patient.getPassword());
+	}
+
+
+
+	@Override
+	public PatientDto getPd(int pid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

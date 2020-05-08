@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,20 +22,23 @@ import com.app.pojos.Medicines;
 import com.app.pojos.Patient;
 
 @Repository
-@Transactional
 public class AdminDaoImple implements IAdminDao{
 
 	@Autowired
 	private SessionFactory sf;
+	private Session session;
+	
 	
 	public AdminDaoImple() {
+		session = sf.getCurrentSession();
+		
 		System.out.println("inside admin dao implementation");
 	}
 	
 	
 	@Override
 	public String addDept(DepartmentList dept) {
-		sf.getCurrentSession().save(dept);
+		session.save(dept);
 		return "dept added successfully";
 	}
 	
